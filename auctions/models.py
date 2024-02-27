@@ -24,7 +24,8 @@ class Bid(models.Model):
     bid_time=models.DateTimeField(auto_now_add=True)
     bidder=models.ForeignKey(User,related_name='owner',on_delete=models.CASCADE)
     listing=models.ForeignKey(Listing,on_delete=models.CASCADE,related_name='listingBid',default='',null=True,blank=True)
-    
+    def __str__(self):
+        return f"Bid of {self.bid_amount} by {self.bidder}"
 
 class Comment(models.Model):
     author=models.ForeignKey(User,on_delete=models.CASCADE,related_name='authors',null=True,blank=True)
