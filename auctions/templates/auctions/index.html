@@ -1,0 +1,34 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <div class="alert alert-primary" role="alert">
+                {{ message }}
+            </div>
+            {% if owner %}
+                <div class="alert alert-primary" role="alert">
+                    Congratulations {{owner}}, you wanned the the bid!
+                </div>
+            {% endif %}
+        {% endfor %}
+    </ul>
+{% endif %}
+    <h2>Active Listings</h2>
+        {% for product in products %}
+            <div class="card" style="width: 18rem;">
+                <img src="{{product.image}}" class="card-img-top" alt="{{product.name}}">
+                <div class="card-body">
+                <h5 class="card-title">{{product.name}}</h5>
+                <p class="card-text">{{product.description}}</p>                
+                <p class="card-text">Price: {{ product.amount.bid_amount }}</p>
+
+
+                <a href="{% url 'detailed' product.id %}" class="btn btn-primary">More about this {{product.name}}</a>
+                </div>
+            </div>
+        {% empty %}
+            <p>The store is currently empty with nothing to sell.</p>
+        {% endfor %}
+{% endblock %}

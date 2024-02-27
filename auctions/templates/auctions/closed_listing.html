@@ -1,0 +1,18 @@
+<!-- closed_listing.html -->
+
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>{{ listing.title }}</h1>
+    <p>{{ listing.description }}</p>
+
+    {% if winner %}
+        {% if request.user == winner %}
+            <p>Congratulations! You have won the auction for this listing.</p>
+        {% else %}
+            <p>{{ winner.username }} has won the auction for this listing.</p>
+        {% endif %}
+    {% else %}
+        <p>This auction has ended.</p>
+    {% endif %}
+{% endblock %}

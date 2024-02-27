@@ -1,0 +1,49 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Active Listings</h2>
+    {% if request.user == winner %}
+        {{message}}
+    {% endif %}
+    <div class="card mb-3" style="max-width: 740px;">
+        <div class="row g-0">
+          <div class="col-md-4">
+            <img src="{{product.image}}" class="img-fluid rounded-start" alt="{{product.name}}">
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+                <h5 class="card-title">{{product.name}}</h5>
+                <p class="card-text">{{product.description}}</p>
+                <p class="card-text"><small class="text-body-secondary">Price: {{product.amount.bid_amount}}</small></p>
+            </div>
+            <div class="card-body">
+                
+                {% for comment in allcomments %}
+                    <p class="card-text">{{ comment.message }}</p>
+                    <p class="card-text"><small class="text-body-secondary">{{ comment.time }}</small></p>
+                {% empty %}
+                    <i>No comments yet.</i>
+                {% endfor %}
+                {% if user.is_authenticated %}
+                    <form action="{% url 'comment' product.id %}" method="post"> {% csrf_token %}
+                        <input type="text" class="form-control" name="comment" placeholder="Comment..." >
+                        <input type="submit" name="submit">
+                    </form>
+                {% endif %}
+            </div>
+            {% if request.user.is_authenticated %}
+                {% if isTrue %}
+                    <a href="{% url 'removeFromWatchlist' product.id %}" class="btn btn-primary">Remove from watchlist</a>
+                {% else %}
+                    <a href="{% url 'addToWatchlist' product.id %}" class="btn btn-primary">Add to watchlist</a>
+                {% endif %}
+                <a href="{% url 'placeBid' product.id %}" class="btn btn-primary">placeBid</a>
+            {% endif %}
+            {% if request.user.is_authenticated and request.user == product.creator and product.status %}
+              <a href="{% url 'close_auction' product.id %}" class="btn btn-primary">Close Auction</a>
+            {% endif %}
+
+          </div>
+        </div>
+      </div>
+{% endblock %}
